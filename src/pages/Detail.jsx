@@ -1,12 +1,12 @@
-import { useContext } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { addVote } from '../store/voteSlice';
 import { Link } from 'react-router-dom';
-import { TodoContext } from '../context/TodoContext';
-import { VoteContext } from '../context/VoteContext';
 import '../style.css';
 
 function Detail() {
-  const { selectedTodo } = useContext(TodoContext);
-  const { votes, addVote } = useContext(VoteContext);
+  const selectedTodo = useSelector(state => state.todo.selectedTodo);
+  const votes = useSelector(state => state.vote.votes);
+  const dispatch = useDispatch();
 
   if (!selectedTodo) return (
     <div className="container">
@@ -22,15 +22,12 @@ function Detail() {
         <p>Judul: <span>{selectedTodo.title}</span></p>
         <p>User: <span>{selectedTodo.user}</span></p>
         <p>Vote: <span>{votes[selectedTodo.id] || 0}</span></p>
-
-        {/* ← Tambah tombol vote di sini! */}
         <button
-          onClick={() => addVote(selectedTodo.id)}
+          onClick={() => dispatch(addVote(selectedTodo.id))}
           style={{ marginTop: '10px' }}
         >
-        Vote
+          Vote
         </button>
-
       </div>
       <Link className="back-link" to="/">Kembali</Link>
     </div>

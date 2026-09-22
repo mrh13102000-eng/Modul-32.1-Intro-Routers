@@ -1,21 +1,19 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { TodoProvider } from './context/TodoContext';
-import { VoteProvider } from './context/VoteContext';
-import Home from './pages/Home';
-import Detail from './pages/Detail';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Provider } from "react-redux";
+import store from "./store";
+import Home from "./pages/Home";
+import Detail from "./pages/Detail";
 
 function App() {
   return (
-    <BrowserRouter>
-      <TodoProvider>
-        <VoteProvider>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/detail" element={<Detail />} />
-          </Routes>
-        </VoteProvider>
-      </TodoProvider>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/detail" element={<Detail />} />
+        </Routes>
+      </BrowserRouter>
+    </Provider>
   );
 }
 

@@ -1,12 +1,21 @@
-import { useContext, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+// ↑ useSelector = ambil data dari store
+// ↑ useDispatch = kirim aksi ke store
+
+import { setSelectedTodo } from '../store/todoSlice';
+import { addVote } from '../store/voteSlice';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TodoContext } from '../context/TodoContext';
-import { VoteContext } from '../context/VoteContext';
 import '../style.css';
 
 function Home() {
-  const { todos, setSelectedTodo } = useContext(TodoContext);
-  const { votes, addVote } = useContext(VoteContext);
+  const todos = useSelector(state => state.todo.todos);
+  const votes = useSelector(state => state.vote.votes);
+  // ↑ ambil data dari store
+
+  const dispatch = useDispatch();
+  // ↑ untuk kirim aksi ke store
+
   const [user, setUser] = useState('Semua');
   const navigate = useNavigate();
 
@@ -15,7 +24,7 @@ function Home() {
     : todos.filter(todo => todo.user === user);
 
   function handleClick(todo) {
-    setSelectedTodo(todo);
+    dispatch(setSelectedTodo(todo)); // ← kirim aksi ke store
     navigate('/detail');
   }
 
@@ -31,16 +40,13 @@ function Home() {
 
       {filteredTodos.map(todo => (
         <div className="todo-item" key={todo.id}>
-
           <div>
             <p className="todo-title">{todo.title}</p>
             <p className="todo-user">{todo.user}</p>
           </div>
-
-          {/* Tombol-tombol */}
           <div className="vote-section">
             <span className="vote-count">{votes[todo.id] || 0}</span>
-            <button onClick={() => addVote(todo.id)}>
+            <button onClick={() => dispatch(addVote(todo.id))}>
               Vote
             </button>
             <button
@@ -50,7 +56,6 @@ function Home() {
               Lihat Detail
             </button>
           </div>
-
         </div>
       ))}
     </div>
