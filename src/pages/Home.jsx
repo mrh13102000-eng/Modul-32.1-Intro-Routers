@@ -1,20 +1,22 @@
-import { useSelector, useDispatch } from 'react-redux';
-// ↑ useSelector = ambil data dari store
-// ↑ useDispatch = kirim aksi ke store
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+// ↑ useRecoilValue = baca atom (seperti useSelector)
+// ↑ useRecoilState = baca + tulis atom (mirip useState tapi global)
+// ↑ useSetRecoilState = tulis atom (seperti dispatch)
 
-import { setSelectedTodo } from '../store/todoSlice';
-import { addVote } from '../store/voteSlice';
+import { todoListAtom, todoItemAtom, voteAtom } from '../store/atoms';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../style.css';
 
 function Home() {
-  const todos = useSelector(state => state.todo.todos);
-  const votes = useSelector(state => state.vote.votes);
-  // ↑ ambil data dari store
+  const todos = useRecoilValue(todoListAtom);
+  // ↑ ambil daftar todo dari atom
 
-  const dispatch = useDispatch();
-  // ↑ untuk kirim aksi ke store
+  const [votes, setVotes] = useRecoilState(voteAtom);
+  // ↑ baca + tulis counter vote dari atom
+
+  const setTodoItem = useSetRecoilState(todoItemAtom);
+  // ↑ tulis todo yang dipilih ke atom
 
   const [user, setUser] = useState('Semua');
   const navigate = useNavigate();
@@ -24,8 +26,16 @@ function Home() {
     : todos.filter(todo => todo.user === user);
 
   function handleClick(todo) {
-    dispatch(setSelectedTodo(todo)); // ← kirim aksi ke store
+    setTodoItem(todo); // ← simpan todo yang diklik ke atom
     navigate('/detail');
+  }
+
+  function handleVote(todoId) {
+    // ↑ tambah 1 vote untuk todo itu (update atom)
+    setVotes(prev => ({
+      ...prev,
+      [todoId]: (prev[todoId] || 0) + 1,
+    }));
   }
 
   return (
@@ -46,7 +56,7 @@ function Home() {
           </div>
           <div className="vote-section">
             <span className="vote-count">{votes[todo.id] || 0}</span>
-            <button onClick={() => dispatch(addVote(todo.id))}>
+            <button onClick={() => handleVote(todo.id)}>
               Vote
             </button>
             <button
