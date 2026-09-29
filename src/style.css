@@ -26,6 +26,15 @@ h1 {
   font-size: 26px;
 }
 
+/* User Label */
+.user-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 6px;
+}
+
 /* Select */
 select {
   width: 100%;
@@ -35,6 +44,11 @@ select {
   margin-bottom: 20px;
   font-size: 14px;
   cursor: pointer;
+}
+
+select:focus-visible {
+  outline: 2px solid #6c63ff;
+  outline-offset: 1px;
 }
 
 /* Todo Item */
@@ -54,6 +68,12 @@ select {
   background: #e8eaf6;
   border-color: #6c63ff;
   cursor: pointer;
+}
+
+/* Baris item bisa diklik, jadi kasih penanda saat keyboard fokus */
+.todo-item:focus-visible {
+  outline: 2px solid #6c63ff;
+  outline-offset: 2px;
 }
 
 /* Todo Title */
@@ -133,4 +153,8 @@ button:hover {
 .detail-card span {
   font-weight: 600;
   color: #6c63ff;
+}
+
+.detail-card button {
+  margin-top: 10px;
 }

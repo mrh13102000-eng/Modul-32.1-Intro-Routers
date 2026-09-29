@@ -1,45 +1,53 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
-// ↑ baca atom todoItem (todo yang dipilih di Home)
-// ↑ baca + tulis atom vote (counter yang sama dengan Home)
-
-import { todoItemAtom, voteAtom } from '../store/atoms';
 import { Link } from 'react-router-dom';
+import { useTodoStore } from '../store/todoStore';
 import '../style.css';
 
 function Detail() {
-  const selectedTodo = useRecoilValue(todoItemAtom);
-  const [votes, setVotes] = useRecoilState(voteAtom);
+  // Semua hook HARUS dipanggil sebelum return apa pun (aturan rules-of-hooks).
+  const todoItem = useTodoStore((s) => s.todoItem);
+  const votes = useTodoStore((s) => s.votes);
+  const currentUser = useTodoStore((s) => s.currentUser);
+  const vote = useTodoStore((s) => s.vote);
 
-  if (!selectedTodo) return (
-    <div className="container">
-      <p>Tidak ada todo dipilih!</p>
-      <Link className="back-link" to="/">Kembali</Link>
-    </div>
-  );
-
-  function handleVote() {
-    // ↑ tambah 1 vote (update atom yang sama dengan Home)
-    setVotes(prev => ({
-      ...prev,
-      [selectedTodo.id]: (prev[selectedTodo.id] || 0) + 1,
-    }));
+  // Todo diambil dari store yang sama dengan Home, bukan dari URL atau API.
+  // Kalau halaman di-refresh, store di-reset sehingga todoItem jadi null.
+  if (!todoItem) {
+    return (
+      <div className="container">
+        <p>Tidak ada todo dipilih!</p>
+        <Link className="back-link" to="/">
+          Kembali
+        </Link>
+      </div>
+    );
   }
 
   return (
     <div className="container">
       <h1>Detail Todo</h1>
+
       <div className="detail-card">
-        <p>Judul: <span>{selectedTodo.title}</span></p>
-        <p>User: <span>{selectedTodo.user}</span></p>
-        <p>Vote: <span>{votes[selectedTodo.id] || 0}</span></p>
-        <button
-          onClick={handleVote}
-          style={{ marginTop: '10px' }}
-        >
-          Vote
-        </button>
+        <p>
+          Judul: <span>{todoItem.title}</span>
+        </p>
+        <p>
+          Ditugaskan ke: <span>{todoItem.user}</span>
+        </p>
+        <p>
+          Vote: <span>{votes[todoItem.id] ?? 0}</span>
+        </p>
+        <p>
+          Sedang dipakai oleh: <span>{currentUser}</span>
+        </p>
+
+        {/* Action vote yang sama dengan di Home, jadi counter langsung sinkron
+            tanpa perlu kirim data apa pun antar halaman. */}
+        <button onClick={() => vote(todoItem.id)}>Vote</button>
       </div>
-      <Link className="back-link" to="/">Kembali</Link>
+
+      <Link className="back-link" to="/">
+        Kembali
+      </Link>
     </div>
   );
 }
