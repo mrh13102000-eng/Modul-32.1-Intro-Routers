@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import { styled } from "@linaria/react";
 
 const red = "#ff3b30";
 const blue = "#3b3bff";
@@ -43,8 +43,7 @@ export default function App() {
     <div style={{ textAlign: "center" }}>
       <Title>Selamat datang di pelajaran CSS-in-JS</Title>
       <Name>JayJay</Name>
-      <BlueButton>Lanjut Belajar!</BlueButton>{" "}
-      <RedButton>Kembali</RedButton>
+      <BlueButton>Lanjut Belajar!</BlueButton> <RedButton>Kembali</RedButton>
     </div>
   );
 }
