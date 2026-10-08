@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 const red = "#ff3b30";
 const blue = "#3b3bff";
