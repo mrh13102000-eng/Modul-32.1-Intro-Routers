@@ -1,18 +1,50 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import Detail from "./pages/Detail";
+import styled from "styled-components";
 
-// Zustand TIDAK butuh Provider seperti Context.
-// State lives di store global, jadi halaman cukup import hook-nya saja.
-function App() {
+const red = "#ff3b30";
+const blue = "#3b3bff";
+
+// Style dasar yang dipakai ulang
+const Text = styled.p`
+  text-align: center;
+  font-weight: bold;
+`;
+
+// Extend dari Text
+const Title = styled(Text)`
+  color: ${red};
+  font-size: 24px;
+`;
+const Name = styled(Text)`
+  color: ${blue};
+  font-size: 14px;
+`;
+
+// Tombol dasar
+const Button = styled.button`
+  padding: 8px 14px;
+  border-radius: 6px;
+  background: white;
+  font-weight: bold;
+  cursor: pointer;
+`;
+
+// Extend dari Button
+const BlueButton = styled(Button)`
+  color: ${blue};
+  border: 1px solid ${blue};
+`;
+const RedButton = styled(Button)`
+  color: ${red};
+  border: 1px solid ${red};
+`;
+
+export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/detail" element={<Detail />} />
-      </Routes>
-    </BrowserRouter>
+    <div style={{ textAlign: "center" }}>
+      <Title>Selamat datang di pelajaran CSS-in-JS</Title>
+      <Name>JayJay</Name>
+      <BlueButton>Lanjut Belajar!</BlueButton>{" "}
+      <RedButton>Kembali</RedButton>
+    </div>
   );
 }
-
-export default App;
